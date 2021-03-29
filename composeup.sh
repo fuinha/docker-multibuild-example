@@ -1,6 +1,6 @@
 #!/bin/sh
 
-dockerbuild.sh 
+./dockerbuild.sh 
 
 echo Run nodewebapp up
 
