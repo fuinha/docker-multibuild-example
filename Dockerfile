@@ -1,19 +1,20 @@
-FROM node:14.15.5 AS ui-build
+FROM node:14.15.5 AS WEB-APP
 # set the work directory
 WORKDIR /usr/src/app
 # copy webapp folder
 COPY WebApp/ ./WebApp/
 # RUN npm install for node js dependencies
 RUN cd WebApp \
-&& yarn add @angular/cli \
-&& yarn install && yarn build
+&& npm install @angular/cli \
+&& npm install && npm run build
 
+RUN export CLOUDSDK_PYTHON=python2
 
 FROM node:14.15.5 AS server-build
 WORKDIR /root/
-COPY --from=ui-build /usr/src/app/WebApp/dist ./WebApp/dist
+COPY --from=WEB-APP /usr/src/app/WebApp/dist ./WebApp/dist
 COPY package*.json ./
-RUN yarn install
+RUN npm install
 COPY index.js .
 
 #COPY --from=nginx:latest
